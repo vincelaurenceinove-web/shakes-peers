@@ -682,21 +682,21 @@
     color:var(--ivory);
   }
 
-  /* ---------- FOOTER ---------- */
+  /* ---------- PEER ---------- */
 
- .peers-section{ max-width:1000px; }
+ .peers-section{ max-width:1100px; }
   .peers-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
-    gap:1.6rem 1.2rem;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:2rem 1rem;
   }
   .peer{
     text-align:center;
   }
   .peer-photo{
     position:relative;
-    width:150px; height:150px;
-    margin:0 auto 1rem;
+    width:116px; height:116px;
+    margin:0 auto 0.9rem;
     border-radius:50%;
     padding:5px;
     border:1px solid rgba(201,162,77,0.45);
@@ -724,22 +724,14 @@
   .peer-photo .initial{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
-    font-size:3.2rem;
+    font-size:2.6rem;
     color:rgba(232,200,116,0.7);
     line-height:1;
-  }
-  .peer-role{
-    font-family:'Cinzel', serif;
-    font-size:0.62rem;
-    letter-spacing:0.28em;
-    text-transform:uppercase;
-    color:var(--gold);
-    margin-bottom:0.35rem;
   }
   .peer-name{
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
-    font-size:1.35rem;
+    font-size:1.2rem;
     color:var(--ivory);
     line-height:1.2;
   }
@@ -753,8 +745,8 @@
   }
   @media (max-width:640px){
     .peers-grid{ grid-template-columns:repeat(2, 1fr); gap:1.6rem 0.8rem; }
-    .peer-photo{ width:120px; height:120px; }
-    .peer-photo .initial{ font-size:2.6rem; }
+    .peer-photo{ width:104px; height:104px; }
+    .peer-photo .initial{ font-size:2.3rem; }
   }
   
   /* ---------- FOOTER ---------- */
@@ -1246,8 +1238,25 @@
     { name: 'Sally Famanilla', line: 'Utak ng Grupo.', photo: 'peers/member-1.jpg' },
     { name: 'Camie Famanilla', line: 'Mataray na may puso.', photo: 'peers/member-2.jpg' },
     { name: 'Anghel Nanta', line: 'Disney Princess.', photo: 'peers/member-3.jpg' },
-    { name: 'Liz Nanta', line: 'Simple at tunay.', photo: 'peers/member-4.jpg' },
-    { name: 'Gha Broñola', line: 'Mapagmahal at maalaga photo: 'peers/member-4.jpg' },
+    { name: 'Liza Nanta', line: 'Simple at tunay.', photo: 'peers/member-4.jpg' },
+    { name: 'Gha Broñola', line: 'Mapagmahal at maalaga.', photo: 'peers/member-5.jpg' },
+    { name: 'Jasmin Salugta', line: 'Cool at easy kausap', photo: 'peers/member-6.jpg' },
+    { name: 'Regielyn Fajurano', line: 'Super sweet at napaka aktibo.', photo: 'peers/member-7.jpg' },
+    { name: 'Cris Tobias', line: 'Laging antok pero game.', photo: 'peers/member-8.jpg' },
+    { name: 'Joyce Tobias', line: 'Game na Game.', photo: 'peers/member-9.jpg' },
+    { name: 'AJ Tobias', line: 'Super kulit, mabait lang pag tulog.', photo: 'peers/member-10.jpg' },
+    { name: 'Ronnie Gonzales', line: 'Lover boy ng grupo.', photo: 'peers/member-11.jpg' },
+    { name: 'Cecille Gonzales', line: 'Mabilis lapitan.', photo: 'peers/member-12.jpg' },
+    { name: 'Queenie', line: 'Hot at sexy.', photo: 'peers/member-13.jpg' },
+    { name: 'Eva Freyra', line: 'Walang hamon hindi kayang lagpasan.', photo: 'peers/member-14.jpg' },
+    { name: 'Michael "Dagul" Pimentel', line: 'Laging on the go.', photo: 'peers/member-15.jpg' },
+    { name: 'Rj "Jhai Jhai" Pimentel', line: 'Ina ni mikay.', photo: 'peers/member-16.jpg' },
+    { name: 'Reslie Inovejas', line: 'One-line intro.', photo: 'peers/member-17.jpg' },
+    { name: 'Jheng Inovejas', line: 'One-line intro.', photo: 'peers/member-18.jpg' },
+    { name: 'Jocelyn Residuo', line: 'One-line intro.', photo: 'peers/member-19.jpg' },
+    { name: 'Name 22', line: 'One-line intro.', photo: 'peers/member-20.jpg' },
+    { name: 'Name 22', line: 'One-line intro.', photo: 'peers/member-21.jpg' },
+     { name: 'Name 22', line: 'One-line intro.', photo: 'peers/member-20.jpg' },
   ];
  
   (function(){
@@ -1281,12 +1290,6 @@
       }
       card.appendChild(ph);
  
-      if (p.role){
-        const r = document.createElement('p');
-        r.className = 'peer-role';
-        r.textContent = p.role;
-        card.appendChild(r);
-      }
       const n = document.createElement('p');
       n.className = 'peer-name';
       n.textContent = p.name;
