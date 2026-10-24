@@ -509,6 +509,79 @@
     white-space:nowrap;
   }
 
+  /* ---------- GUEST PHOTO WALL ---------- */
+
+.photo-wall-section{ max-width:980px; }
+  .upload-box{
+    text-align:center;
+    margin:0 auto 2.4rem;
+  }
+  .upload-btn{
+    display:inline-block;
+    background:var(--gold);
+    color:var(--black);
+    font-family:'Cinzel', serif;
+    font-size:0.8rem;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    padding:0.95rem 2rem;
+    border:1px solid var(--gold);
+    cursor:pointer;
+    transition:background .3s ease, color .3s ease;
+  }
+  .upload-btn:hover{ background:transparent; color:var(--gold-bright); }
+  .upload-btn[aria-disabled="true"]{ opacity:.5; pointer-events:none; }
+  #photoInput{ position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
+  #photoInput:focus-visible + .upload-btn{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+  .upload-status{
+    margin-top:1rem;
+    min-height:1.4em;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--ivory-dim);
+  }
+  .upload-status.err{ color:#e59a9a; }
+ 
+  .photo-grid{
+    columns:3 220px;
+    column-gap:12px;
+  }
+  .photo-grid .ph{
+    break-inside:avoid;
+    margin-bottom:12px;
+    border:1px solid rgba(201,162,77,0.25);
+    background:var(--charcoal);
+    padding:5px;
+    cursor:zoom-in;
+    display:block;
+    width:100%;
+  }
+  .photo-grid img{
+    width:100%; height:auto; display:block;
+    filter:sepia(0.1) saturate(1.05);
+    transition:filter .3s ease;
+  }
+  .photo-grid .ph:hover img{ filter:none; }
+  .photo-empty{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--ivory-dim);
+  }
+ 
+  .lightbox{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(10,9,8,0.94);
+    display:none;
+    align-items:center; justify-content:center;
+    padding:1.5rem;
+    cursor:zoom-out;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:100%; border:1px solid var(--gold-dim); }
+  
   /* ---------- HOSTS ---------- */
   .host-section{ padding:56px 1.5rem 60px; }
   .host-card{
@@ -752,6 +825,33 @@
   </svg>
 </div>
 
+<div class="flourish" aria-hidden="true">
+  <svg viewBox="0 0 300 20" xmlns="http://www.w3.org/2000/svg" stroke="#8a6d3a" stroke-width="1" fill="none">
+    <line x1="0" y1="10" x2="120" y2="10"/>
+    <circle cx="150" cy="10" r="4" fill="#c9a24d" stroke="none"/>
+    <line x1="180" y1="10" x2="300" y2="10"/>
+  </svg>
+</div>
+ 
+<section class="reveal photo-wall-section" id="photo-wall">
+  <p class="eyebrow" style="margin-bottom:1rem;">Behind the Masks</p>
+  <h2 class="section-title">The Night in Pictures</h2>
+  <p class="lede" style="margin-bottom:2rem;">
+    Snap it, share it. Add your photos from the gala and watch our wall of memories grow.
+  </p>
+ 
+  <div class="upload-box">
+    <input type="file" id="photoInput" accept="image/*" multiple>
+    <label for="photoInput" class="upload-btn" id="uploadBtn">Upload Your Photos</label>
+    <p class="upload-status" id="uploadStatus" role="status" aria-live="polite"></p>
+  </div>
+ 
+  <div class="photo-grid" id="photoGrid"></div>
+  <p class="photo-empty" id="photoEmpty" hidden>No photos yet. Be the first to share a memory.</p>
+</section>
+ 
+<div class="lightbox" id="lightbox" aria-hidden="true"><img alt="Gala photo enlarged"></div>
+  
 <section class="host-section">
   <div class="host-card">
     <div class="host-grid">
@@ -961,5 +1061,117 @@
   tick();
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  /* ---- FILL THESE IN (from Supabase → Project Settings → API) ---- */
+  const SUPABASE_URL      = 'https://YOUR-PROJECT-ID.supabase.co';
+  const SUPABASE_ANON_KEY = 'YOUR-ANON-PUBLIC-KEY';
+  const BUCKET            = 'event-photos';
+  const MAX_SIDE          = 1800;   // photos are shrunk to this many pixels on the longest side
+  const MAX_PER_PICK      = 10;     // photos allowed per upload
+  /* ---------------------------------------------------------------- */
+ 
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const input  = document.getElementById('photoInput');
+  const btn    = document.getElementById('uploadBtn');
+  const status = document.getElementById('uploadStatus');
+  const grid   = document.getElementById('photoGrid');
+  const empty  = document.getElementById('photoEmpty');
+  const lb     = document.getElementById('lightbox');
+  const lbImg  = lb.querySelector('img');
+ 
+  function setStatus(msg, isErr){
+    status.textContent = msg;
+    status.classList.toggle('err', !!isErr);
+  }
+ 
+  /* Shrink big phone photos before uploading (saves storage + loads faster) */
+  async function shrink(file){
+    try{
+      const bmp = await createImageBitmap(file);
+      const scale = Math.min(1, MAX_SIDE / Math.max(bmp.width, bmp.height));
+      const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+      const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
+      return blob || file;
+    }catch(e){
+      return file;   // if the browser can't decode it, upload the original
+    }
+  }
+ 
+  function randomName(){
+    const id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+    return `${Date.now()}-${id}.jpg`;
+  }
+ 
+  async function loadPhotos(){
+    const { data, error } = await sb.storage.from(BUCKET).list('', {
+      limit: 300,
+      sortBy: { column: 'created_at', order: 'desc' }
+    });
+    if (error){ setStatus('Could not load the photo wall right now.', true); return; }
+ 
+    const files = (data || []).filter(f => f.name && !f.name.startsWith('.'));
+    grid.innerHTML = '';
+    empty.hidden = files.length > 0;
+ 
+    files.forEach(f => {
+      const url = sb.storage.from(BUCKET).getPublicUrl(f.name).data.publicUrl;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ph';
+      b.setAttribute('aria-label', 'Open photo');
+      const img = document.createElement('img');
+      img.src = url;
+      img.loading = 'lazy';
+      img.alt = 'Photo shared by a guest';
+      b.appendChild(img);
+      b.addEventListener('click', () => { lbImg.src = url; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); });
+      grid.appendChild(b);
+    });
+  }
+ 
+  input.addEventListener('change', async () => {
+    let files = Array.from(input.files || []).filter(f => f.type.startsWith('image/'));
+    if (!files.length) return;
+    if (files.length > MAX_PER_PICK){
+      files = files.slice(0, MAX_PER_PICK);
+      setStatus(`Only the first ${MAX_PER_PICK} photos will be uploaded this round.`);
+    }
+ 
+    btn.setAttribute('aria-disabled', 'true');
+    let ok = 0, failed = 0;
+ 
+    for (let i = 0; i < files.length; i++){
+      setStatus(`Uploading ${i + 1} of ${files.length}…`);
+      const blob = await shrink(files[i]);
+      const { error } = await sb.storage.from(BUCKET).upload(randomName(), blob, {
+        contentType: 'image/jpeg',
+        cacheControl: '31536000'
+      });
+      error ? failed++ : ok++;
+    }
+ 
+    input.value = '';
+    btn.removeAttribute('aria-disabled');
+    setStatus(
+      failed ? `${ok} uploaded, ${failed} failed. Please try those again.`
+             : `Thank you! ${ok} photo${ok > 1 ? 's' : ''} added to the wall.`,
+      failed > 0
+    );
+    loadPhotos();
+  });
+ 
+  /* Lightbox close */
+  const closeLb = () => { lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src = ''; };
+  lb.addEventListener('click', closeLb);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+ 
+  loadPhotos();
+})();
+</script>
 </body>
 </html>
