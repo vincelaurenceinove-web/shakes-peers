@@ -509,7 +509,7 @@
     white-space:nowrap;
   }
 
-/*---------- GUEST PHOTO WALL ---------- */
+/*---------- LIST IN ORDER ---------- */
 
   order-section{ max-width:900px; }
   .order-grid{
@@ -682,6 +682,81 @@
     color:var(--ivory);
   }
 
+  /* ---------- FOOTER ---------- */
+
+ .peers-section{ max-width:1000px; }
+  .peers-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    gap:1.6rem 1.2rem;
+  }
+  .peer{
+    text-align:center;
+  }
+  .peer-photo{
+    position:relative;
+    width:150px; height:150px;
+    margin:0 auto 1rem;
+    border-radius:50%;
+    padding:5px;
+    border:1px solid rgba(201,162,77,0.45);
+    background:var(--charcoal);
+    box-shadow:0 10px 30px rgba(0,0,0,0.55), 0 0 30px rgba(201,162,77,0.08);
+    transition:transform .4s ease, box-shadow .4s ease;
+  }
+  .peer:hover .peer-photo{
+    transform:translateY(-4px);
+    box-shadow:0 14px 36px rgba(0,0,0,0.6), 0 0 40px rgba(201,162,77,0.2);
+  }
+  .peer-photo img{
+    width:100%; height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
+    filter:sepia(0.1) saturate(1.05);
+  }
+  .peer-photo.missing{
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(201,162,77,0.16), transparent 60%),
+      linear-gradient(160deg, var(--wine), var(--wine-deep) 70%);
+  }
+  .peer-photo .initial{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:3.2rem;
+    color:rgba(232,200,116,0.7);
+    line-height:1;
+  }
+  .peer-role{
+    font-family:'Cinzel', serif;
+    font-size:0.62rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:0.35rem;
+  }
+  .peer-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.35rem;
+    color:var(--ivory);
+    line-height:1.2;
+  }
+  .peer-line{
+    margin-top:0.35rem;
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:1rem;
+    line-height:1.5;
+    color:var(--ivory-dim);
+  }
+  @media (max-width:640px){
+    .peers-grid{ grid-template-columns:repeat(2, 1fr); gap:1.6rem 0.8rem; }
+    .peer-photo{ width:120px; height:120px; }
+    .peer-photo .initial{ font-size:2.6rem; }
+  }
+  
   /* ---------- FOOTER ---------- */
   footer{
     text-align:center;
@@ -966,6 +1041,12 @@
   </div>
 </section>
 
+<section class="reveal peers-section" id="peers">
+  <p class="eyebrow" style="margin-bottom:1rem;">The Faces Behind the Masks</p>
+  <h2 class="section-title" style="margin-bottom:2.4rem;">Meet the Peers</h2>
+  <div class="peers-grid" id="peersGrid"></div>
+</section>
+  
 <footer>
   <p>Five Years of Friendship. One night of mystery. A lifetime of memories.</p>
   <p class="fine">Shakes Peers &middot; All Rights Reserved &middot; 2026</p>
@@ -1159,6 +1240,68 @@
   tick();
 </script>
 
+<script>
+  /* EDIT HERE: one line per member. Add, remove or reorder freely. */
+  const PEERS = [
+    { name: 'Full Name', role: 'Committee', line: 'One-line intro goes here.', photo: 'peers/member-1.jpg' },
+    { name: 'Full Name', role: 'Committee', line: 'One-line intro goes here.', photo: 'peers/member-2.jpg' },
+    { name: 'Full Name', role: '',          line: 'One-line intro goes here.', photo: 'peers/member-3.jpg' },
+    { name: 'Full Name', role: '',          line: 'One-line intro goes here.', photo: 'peers/member-4.jpg' }
+  ];
+ 
+  (function(){
+    const grid = document.getElementById('peersGrid');
+    PEERS.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'peer';
+ 
+      const ph = document.createElement('div');
+      ph.className = 'peer-photo';
+ 
+      const showInitial = () => {
+        ph.classList.add('missing');
+        ph.innerHTML = '';
+        const s = document.createElement('span');
+        s.className = 'initial';
+        s.textContent = (p.name || '?').trim().charAt(0).toUpperCase();
+        ph.appendChild(s);
+      };
+ 
+      if (p.photo){
+        const img = new Image();
+        img.alt = p.name;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.addEventListener('error', showInitial);
+        img.src = p.photo;
+        ph.appendChild(img);
+      } else {
+        showInitial();
+      }
+      card.appendChild(ph);
+ 
+      if (p.role){
+        const r = document.createElement('p');
+        r.className = 'peer-role';
+        r.textContent = p.role;
+        card.appendChild(r);
+      }
+      const n = document.createElement('p');
+      n.className = 'peer-name';
+      n.textContent = p.name;
+      card.appendChild(n);
+ 
+      if (p.line){
+        const l = document.createElement('p');
+        l.className = 'peer-line';
+        l.textContent = p.line;
+        card.appendChild(l);
+      }
+      grid.appendChild(card);
+    });
+  })();
+</script>
+  
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
