@@ -509,7 +509,70 @@
     white-space:nowrap;
   }
 
-  /* ---------- GUEST PHOTO WALL ---------- */
+/*---------- GUEST PHOTO WALL ---------- */
+
+  order-section{ max-width:900px; }
+  .order-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.5rem;
+  }
+  .order-card{
+    background:linear-gradient(180deg, var(--charcoal), rgba(21,18,16,0.4));
+    border:1px solid rgba(201,162,77,0.22);
+    border-radius:2px;
+    padding:2.2rem 1.6rem 1.8rem;
+    position:relative;
+  }
+  .order-card::before, .order-card::after{
+    content:"";
+    position:absolute;
+    width:26px; height:26px;
+    border:1px solid var(--gold-dim);
+  }
+  .order-card::before{ top:8px; left:8px; border-right:none; border-bottom:none; }
+  .order-card::after{ bottom:8px; right:8px; border-left:none; border-top:none; }
+ 
+  .order-card h3{
+    font-family:'Cinzel', serif;
+    font-weight:500;
+    font-size:0.85rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--gold-bright);
+    margin-bottom:1.2rem;
+  }
+  .order-list{
+    list-style:none;
+    counter-reset:model;
+  }
+  .order-list li{
+    counter-increment:model;
+    display:flex;
+    align-items:baseline;
+    gap:1rem;
+    padding:0.8rem 0;
+    border-bottom:1px solid rgba(201,162,77,0.14);
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.3rem;
+    color:var(--ivory);
+  }
+  .order-list li:last-child{ border-bottom:none; }
+  .order-list li::before{
+    content:counter(model, decimal-leading-zero);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.4rem;
+    color:var(--gold);
+    min-width:2rem;
+  }
+ 
+  @media (max-width:640px){
+    .order-grid{ grid-template-columns:1fr; }
+  }
+  
+/* ---------- GUEST PHOTO WALL ---------- */
 
 .photo-wall-section{ max-width:980px; }
   .upload-box{
@@ -824,7 +887,48 @@
     <line x1="180" y1="10" x2="300" y2="10"/>
   </svg>
 </div>
+
+<section class="reveal order-section" id="modeling-order">
+  <p class="eyebrow" style="margin-bottom:1rem;">The Runway</p>
+  <h2 class="section-title" style="margin-bottom:2rem;">Order of Modeling</h2>
  
+  <div class="order-grid">
+    <div class="order-card">
+      <h3>The Ladies</h3>
+      <ol class="order-list">
+        <li>Cecille</li>
+        <li>Eva</li>
+        <li>Jhai </li>
+        <li>Anna</li>
+        <li>Jheng</li>
+        <li>Sally</li>
+        <li>Queenie</li>
+        <li>Joyce</li>
+        <li>Lyn</li>
+        <li>Angel</li>
+        <li>Gha</li>
+        <li>Anghel</li>
+      </ol>
+    </div>
+ 
+    <div class="order-card">
+      <h3>The Gentlemen</h3>
+      <ol class="order-list">
+        <li>Ron</li>
+        <li>Frinze</li>
+        <li>Vince</li>
+        <li>Gibrian</li>
+        <li>Cris</li>
+        <li>Michael "Dagul"</li>
+        <li>Reslie</li>
+        <li>Angelo</li>
+        <li>Ronie</li>
+        <li>Toto</li>
+      </ol>
+    </div>
+  </div>
+</section>
+  
 <section class="reveal photo-wall-section" id="photo-wall">
   <p class="eyebrow" style="margin-bottom:1rem;">Behind the Masks</p>
   <h2 class="section-title">The Night in Pictures</h2>
