@@ -690,17 +690,6 @@
     grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
     gap:2rem 1rem;
   }
-  .peers-group-title{
-    font-family:'Cinzel', serif;
-    font-weight:500;
-    font-size:0.95rem;
-    letter-spacing:0.34em;
-    text-transform:uppercase;
-    text-align:center;
-    color:var(--gold-bright);
-    margin:0 0 1.8rem;
-  }
-  .peers-group + .peers-group{ margin-top:4rem; }
   .peer{
     text-align:center;
   }
@@ -1055,7 +1044,7 @@
 <section class="reveal peers-section" id="peers">
   <p class="eyebrow" style="margin-bottom:1rem;">The Faces Behind the Masks</p>
   <h2 class="section-title" style="margin-bottom:2.4rem;">Meet the Peers</h2>
-  <div id="peersGroups"></div>
+  <div class="peers-grid" id="peersGrid"></div>
 </section>
 
   
@@ -1281,37 +1270,26 @@
     { name: 'Anna Liza Freyra', line: '', photo: 'peers/member-21.jpg' },
     { name: 'Vince Inovejas', line: '', photo: 'peers/member-22.jpg' },
     { name: 'Frinze Ferion Estrella', line: '', photo: 'peers/memberr-22.jpg' },
-    { name: 'Joshua Libanan', line: '', photo: 'peers/member-23.jpg' },
-    { name: 'Angelo Nanta', line: '', photo: 'peers/member-24.jpg' },
-    { name: 'Carl Nanta', line: '', photo: 'peers/member-25.jpg' },
-    { name: 'Jayjay Nanta', line: '', photo: 'peers/member-26.jpg' }
-    { name: 'Vince Paolo Cuntapay', line: '', photo: 'peers/member-27.jpg' }
-    { name: 'Tyler Cuntapay', line: '', photo: 'peers/member-28.jpg' }
-    { name: 'Joatham Calix Tobias', line: '', photo: 'peers/member-29.jpg' }
-    { name: 'Lucas Freyra', line: '', photo: 'peers/member-30.jpg' }
-    { name: 'Sofia Miranda', line: '', photo: 'peers/member-31.jpg' }
-    { name: 'Quilie Ann Cuntapay', line: '', photo: 'peers/member-32.jpg' }
-    { name: 'Madison Skyler Pimentel', line: '', photo: 'peers/member-33.jpg' }
-    { name: 'Kiang Kiang', line: '', photo: 'peers/member-34.jpg' }
-    { name: 'Michaella Quartler "Mikay" Pimentel', line: '', photo: 'peers/member-35.jpg' }
-    { name: 'Crisha Joy Tobias', line: '', photo: 'peers/member-36.jpg' }
-      ]}
+    { name: 'Jowie Gibrian Broñola', line: '', photo: 'peers/memberr-23.jpg' },
+    { name: 'Joshua Libanan', line: '', photo: 'peers/member-24.jpg' },
+    { name: 'Angelo Nanta', line: '', photo: 'peers/member-25.jpg' },
+    { name: 'Carl Nanta', line: '', photo: 'peers/member-26.jpg' },
+    { name: 'Jayjay Nanta', line: '', photo: 'peers/member-27.jpg' },
+    { name: 'Vince Paolo Cuntapay', line: '', photo: 'peers/member-28.jpg' },
+    { name: 'Tyler Cuntapay', line: '', photo: 'peers/member-29.jpg' },
+    { name: 'Joatham Calix Tobias', line: '', photo: 'peers/member-30.jpg' },
+    { name: 'Lucas Freyra', line: '', photo: 'peers/member-31.jpg' },
+    { name: 'Sofia Miranda', line: '', photo: 'peers/member-32.jpg' },
+    { name: 'Quilie Ann Cuntapay', line: '', photo: 'peers/member-33.jpg' },
+    { name: 'Madison Skyler Pimentel', line: '', photo: 'peers/member-34.jpg' },
+    { name: 'Kiang Kiang', line: '', photo: 'peers/member-35.jpg' },
+    { name: 'Michaella Quartler "Mikay" Pimentel', line: '', photo: 'peers/member-36.jpg' },
+    { name: 'Crisha Joy Tobias', line: '', photo: 'peers/member-37.jpg' },
   ];
  
-  (function(){
-    const wrap = document.getElementById('peersGroups');
-    GROUPS.forEach(g => {
-    const box = document.createElement('div');
-    box.className = 'peers-group';
-    const h = document.createElement('h3');
-    h.className = 'peers-group-title';
-    h.textContent = g.title;
-    box.appendChild(h);
-    const grid = document.createElement('div');
-    grid.className = 'peers-grid';
-    box.appendChild(grid);
-    wrap.appendChild(box);
-    g.members.forEach(p => {
+(function(){
+    const grid = document.getElementById('peersGrid');
+    PEERS.forEach(p => {
       const card = document.createElement('div');
       card.className = 'peer';
  
@@ -1366,8 +1344,8 @@
       }
       grid.appendChild(card);
     });
-    });
   })();
+
 </script>
  
   
