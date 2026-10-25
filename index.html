@@ -1293,8 +1293,19 @@
   ];
  
   (function(){
-    const grid = document.getElementById('peersGrid');
-    PEERS.forEach(p => {
+    const wrap = document.getElementById('peersGroups');
+    GROUPS.forEach(g => {
+    const box = document.createElement('div');
+    box.className = 'peers-group';
+    const h = document.createElement('h3');
+    h.className = 'peers-group-title';
+    h.textContent = g.title;
+    box.appendChild(h);
+    const grid = document.createElement('div');
+    grid.className = 'peers-grid';
+    box.appendChild(grid);
+    wrap.appendChild(box);
+    g.members.forEach(p => {
       const card = document.createElement('div');
       card.className = 'peer';
  
@@ -1311,12 +1322,25 @@
       };
  
       if (p.photo){
+        /* Tries the file name you wrote first, then the same name with other
+           common extensions (.jpg .jpeg .png .webp, upper or lower case). */
+        const base = p.photo.replace(/\.(jpe?g|png|webp)$/i, '');
+        const tries = [p.photo].concat(
+          ['.jpg', '.jpeg', '.png', '.webp', '.JPG', '.JPEG', '.PNG']
+            .map(ext => base + ext)
+            .filter(u => u !== p.photo)
+        );
+        let n = 0;
         const img = new Image();
         img.alt = p.name;
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.addEventListener('error', showInitial);
-        img.src = p.photo;
+        img.addEventListener('error', () => {
+          n++;
+          if (n < tries.length) img.src = tries[n];
+          else showInitial();
+        });
+        img.src = tries[0];
         ph.appendChild(img);
       } else {
         showInitial();
@@ -1335,6 +1359,7 @@
         card.appendChild(l);
       }
       grid.appendChild(card);
+    });
     });
   })();
 </script>
