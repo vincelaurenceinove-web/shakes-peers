@@ -690,6 +690,17 @@
     grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
     gap:2rem 1rem;
   }
+  .peers-group-title{
+    font-family:'Cinzel', serif;
+    font-weight:500;
+    font-size:0.95rem;
+    letter-spacing:0.34em;
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--gold-bright);
+    margin:0 0 1.8rem;
+  }
+  .peers-group + .peers-group{ margin-top:4rem; }
   .peer{
     text-align:center;
   }
@@ -1234,7 +1245,8 @@
 
 <script>
   /* EDIT HERE: one line per member. Add, remove or reorder freely. */
-  const PEERS = [
+  const GROUPS = [
+    {title: 'Shakes Peers', members:[
     { name: 'Sally Famanilla', line: 'Utak ng Grupo.', photo: 'peers/member-1.jpg' },
     { name: 'Camie Famanilla', line: 'Mataray na may puso.', photo: 'peers/member-2.jpg' },
     { name: 'Anghel Nanta', line: 'Disney Princess.', photo: 'peers/member-3.jpg' },
@@ -1259,6 +1271,25 @@
     { name: 'Noel Libanan', line: '', photo: '' },
     { name: 'Toto Freyra', line: '', photo: 'peers/member-20.jpg' },
     { name: 'Anna Liza Freyra', line: '', photo: 'peers/member-21.jpg' },
+      ]},
+    { title: 'Shakes Peers Jr.', members: [
+      { name: 'Vince Inovejas', line: '', photo: 'peers/jr-1.jpg' },
+      { name: 'Frinze Ferion Estrella', line: '', photo: 'peers/jr-2.jpg' },
+      { name: 'Joshua Libanan', line: '', photo: 'peers/jr-3.jpg' },
+      { name: 'Angelo Nanta', line: '', photo: 'peers/jr-4.jpg' },
+      { name: 'Carl Nanta', line: '', photo: 'peers/jr-5.jpg' },
+      { name: 'Jayjay Nanta', line: '', photo: 'peers/jr-6.jpg' }
+      { name: 'Vince Paolo Cuntapay', line: '', photo: 'peers/jr-7.jpg' }
+      { name: 'Tyler Cuntapay', line: '', photo: 'peers/jr-8.jpg' }
+      { name: 'Joatham Calix Tobias', line: '', photo: 'peers/jr-9.jpg' }
+      { name: 'Lucas Freyra', line: '', photo: 'peers/jr-10.jpg' }
+      { name: 'Sofia Miranda', line: '', photo: 'peers/jr-11.jpg' }
+      { name: 'Quilie Ann Cuntapay', line: '', photo: 'peers/jr-12.jpg' }
+      { name: 'Madison Skyler Pimentel', line: '', photo: 'peers/jr-13.jpg' }
+      { name: 'Kiang Kiang', line: '', photo: 'peers/jr-14.jpg' }
+      { name: 'Michaella Quartler "Mikay" Pimentel', line: '', photo: 'peers/jr-15.jpg' }
+      { name: 'Crisha Joy Tobias', line: '', photo: 'peers/jr-16.jpg' }
+
   ];
  
   (function(){
