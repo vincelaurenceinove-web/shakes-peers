@@ -770,10 +770,165 @@
     text-transform:uppercase;
     color:var(--gold-dim);
   }
+
+  /* ---------- INVITATION ---------- */
+
+ body.invite-open{ overflow:hidden; }
+ 
+  .invite{
+    position:fixed; inset:0; z-index:1000;
+    display:flex; align-items:center; justify-content:center;
+    padding:1.2rem;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 30%, rgba(201,162,77,0.12), transparent 65%),
+      radial-gradient(ellipse 90% 70% at 50% 100%, rgba(61,15,24,0.6), transparent 70%),
+      var(--black);
+    transition:opacity .9s ease .5s, visibility 0s linear 1.4s;
+  }
+  /* two curtain halves that slide apart */
+  .invite::before, .invite::after{
+    content:"";
+    position:absolute; top:0; bottom:0; width:50%;
+    background:linear-gradient(180deg, var(--wine), var(--wine-deep));
+    z-index:0;
+    transition:transform 1.1s cubic-bezier(.7,0,.2,1);
+  }
+  .invite::before{ left:0;  border-right:1px solid rgba(201,162,77,0.35); }
+  .invite::after { right:0; border-left:1px solid rgba(201,162,77,0.35); }
+ 
+  .invite-card{
+    position:relative; z-index:1;
+    width:min(560px, 100%);
+    max-height:100%;
+    overflow:auto;
+    text-align:center;
+    padding:2.8rem 1.6rem 2.4rem;
+    background:linear-gradient(180deg, var(--charcoal), rgba(21,18,16,0.92));
+    border:1px solid rgba(201,162,77,0.4);
+    box-shadow:0 30px 80px rgba(0,0,0,0.7), 0 0 70px rgba(201,162,77,0.1);
+    transition:opacity .5s ease, transform .6s ease;
+    animation:riseIn 1.2s ease both .2s;
+  }
+  .invite-card::before, .invite-card::after{
+    content:""; position:absolute; width:34px; height:34px;
+    border:1px solid var(--gold); pointer-events:none;
+  }
+  .invite-card::before{ top:10px; left:10px; border-right:none; border-bottom:none; }
+  .invite-card::after { bottom:10px; right:10px; border-left:none; border-top:none; }
+ 
+  .invite-logos{ display:flex; justify-content:center; gap:1rem; margin-bottom:1.2rem; }
+  .invite-logos img{
+    width:84px; height:84px; object-fit:contain;
+    filter:drop-shadow(0 0 20px rgba(201,162,77,0.3));
+  }
+  .invite-dear{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.35rem;
+    color:var(--gold-bright);
+    margin-bottom:0.6rem;
+    min-height:1.4em;
+  }
+  .invite-small{
+    font-family:'Cinzel', serif;
+    font-size:0.68rem;
+    letter-spacing:0.38em;
+    text-transform:uppercase;
+    color:var(--ivory-dim);
+  }
+  .invite-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:clamp(1.9rem, 7vw, 2.8rem);
+    line-height:1.08;
+    color:var(--ivory);
+    margin:0.9rem 0 0.3rem;
+  }
+  .invite-sub{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(1.2rem, 4.5vw, 1.6rem);
+    color:var(--gold-bright);
+  }
+  .invite-rule{
+    width:120px; height:1px; margin:1.4rem auto;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .invite-when{
+    font-family:'Cinzel', serif;
+    font-size:0.8rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ivory);
+    line-height:2;
+  }
+  .invite-when span{ display:block; color:var(--ivory-dim); font-size:0.72rem; letter-spacing:0.14em; }
+  .invite-note{
+    margin:1.2rem auto 1.8rem;
+    max-width:380px;
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:1.08rem;
+    line-height:1.7;
+    color:var(--ivory-dim);
+  }
+  .invite-btn{
+    background:var(--gold);
+    color:var(--black);
+    font-family:'Cinzel', serif;
+    font-size:0.8rem;
+    letter-spacing:0.26em;
+    text-transform:uppercase;
+    padding:0.95rem 2.2rem;
+    border:1px solid var(--gold);
+    cursor:pointer;
+    transition:background .3s ease, color .3s ease;
+  }
+  .invite-btn:hover{ background:transparent; color:var(--gold-bright); }
+  .invite-btn:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+ 
+  /* opening animation */
+  .invite.opening .invite-card{ opacity:0; transform:scale(.96); }
+  .invite.opening::before{ transform:translateX(-101%); }
+  .invite.opening::after { transform:translateX(101%); }
+  .invite.opening{ opacity:0; visibility:hidden; pointer-events:none; }
+  .invite.gone{ display:none; }
+ 
+  @media (prefers-reduced-motion: reduce){
+    .invite, .invite::before, .invite::after, .invite-card{ transition-duration:0.01ms !important; transition-delay:0s !important; animation:none !important; }
+  }
+  
 </style>
 </head>
 <body>
 
+  <div class="invite" id="invite" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+  <div class="invite-card">
+    <div class="invite-logos">
+      <img src="logo.png" alt="Shakes Peers logo">
+      <img src="logo-jr.png" alt="Shakes Peers Jr. logo">
+    </div>
+ 
+    <p class="invite-dear" id="inviteDear"></p>
+    <p class="invite-small">You are cordially invited to the</p>
+    <h2 class="invite-title" id="inviteTitle">5th Annual Year-End Night Gala</h2>
+    <p class="invite-sub">A Masquerade Affair</p>
+ 
+    <div class="invite-rule" aria-hidden="true"></div>
+ 
+    <p class="invite-when">
+      November 29–30, 2026
+      <span>Verdeoro Resort · Biñan, Laguna</span>
+    </p>
+ 
+    <p class="invite-note">
+      Five years of friendship, one night of mystery. Put on your finest and your mask, and join us.
+    </p>
+ 
+    <button type="button" class="invite-btn" id="inviteBtn">Open Invitation</button>
+  </div>
+</div>
+  
 <section class="hero">
   <div class="glow" aria-hidden="true"></div>
 
@@ -1449,6 +1604,32 @@
  
   loadPhotos();
 })();
+
+  (function(){
+    const inv = document.getElementById('invite');
+    if (!inv) return;
+ 
+    document.body.classList.add('invite-open');
+ 
+    /* Personal greeting: yoursite.com/?to=Sally  ->  "Dear Sally," */
+    try{
+      const to = new URLSearchParams(location.search).get('to');
+      if (to) document.getElementById('inviteDear').textContent = 'Dear ' + to.slice(0, 40) + ',';
+    }catch(e){}
+ 
+    const btn = document.getElementById('inviteBtn');
+    btn.focus({ preventScroll:true });
+ 
+    function openInvite(){
+      if (inv.classList.contains('opening')) return;
+      inv.classList.add('opening');
+      document.body.classList.remove('invite-open');
+      window.scrollTo(0, 0);
+      setTimeout(() => inv.classList.add('gone'), 1600);
+    }
+    btn.addEventListener('click', openInvite);
+  })();
+  
 </script>
 </body>
 </html>
