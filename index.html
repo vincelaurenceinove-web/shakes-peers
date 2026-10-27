@@ -872,20 +872,59 @@
     line-height:1.7;
     color:var(--ivory-dim);
   }
-  .invite-btn{
-    background:var(--gold);
-    color:var(--black);
-    font-family:'Cinzel', serif;
-    font-size:0.8rem;
-    letter-spacing:0.26em;
-    text-transform:uppercase;
-    padding:0.95rem 2.2rem;
-    border:1px solid var(--gold);
+  /* ---- wax seal button ---- */
+  .seal{
+    position:relative;
+    display:block;
+    width:98px; height:98px;
+    margin:0 auto;
+    padding:0; border:none; background:none;
     cursor:pointer;
-    transition:background .3s ease, color .3s ease;
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,0.65));
+    animation:sealPulse 2.6s ease-in-out infinite;
+    transition:transform .3s ease;
   }
-  .invite-btn:hover{ background:transparent; color:var(--gold-bright); }
-  .invite-btn:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+  .seal:hover{ transform:scale(1.07); }
+  .seal:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:6px; border-radius:50%; }
+  @keyframes sealPulse{
+    0%,100%{ filter:drop-shadow(0 8px 14px rgba(0,0,0,0.65)) drop-shadow(0 0 0 rgba(232,200,116,0)); }
+    50%    { filter:drop-shadow(0 8px 14px rgba(0,0,0,0.65)) drop-shadow(0 0 16px rgba(232,200,116,0.45)); }
+  }
+  .seal-half{
+    position:absolute; inset:0;
+    transition:transform .55s cubic-bezier(.3,.7,.3,1), opacity .55s ease;
+  }
+  .seal-half.l{ clip-path:polygon(0 0, 52% 0, 46% 22%, 54% 40%, 45% 62%, 53% 80%, 48% 100%, 0 100%); }
+  .seal-half.r{ clip-path:polygon(52% 0, 100% 0, 100% 100%, 48% 100%, 53% 80%, 45% 62%, 54% 40%, 46% 22%); }
+  .seal-face{
+    position:absolute; inset:0;
+    border-radius:50%;
+    display:grid; place-items:center;
+    background:radial-gradient(circle at 35% 28%, #f6e2a4 0%, #d9b45c 38%, #c9a24d 62%, #8a6d3a 100%);
+    box-shadow:
+      inset 0 0 0 5px rgba(60,40,10,0.18),
+      inset 0 0 0 7px rgba(255,236,170,0.4),
+      inset 0 -6px 10px rgba(80,55,15,0.35);
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:2.1rem;
+    letter-spacing:0.02em;
+    color:#5c4520;
+    text-shadow:0 1px 0 rgba(255,240,190,0.55);
+  }
+  .seal.broken{ animation:none; pointer-events:none; }
+  .seal.broken .seal-half.l{ transform:translate(-22px, 10px) rotate(-16deg); opacity:0; }
+  .seal.broken .seal-half.r{ transform:translate(22px, 10px) rotate(16deg);  opacity:0; }
+  .seal-hint{
+    display:block;
+    margin-top:1rem;
+    font-family:'Cinzel', serif;
+    font-size:0.66rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
  
   /* opening animation */
   .invite.opening .invite-card{ opacity:0; transform:scale(.96); }
@@ -895,14 +934,15 @@
   .invite.gone{ display:none; }
  
   @media (prefers-reduced-motion: reduce){
-    .invite, .invite::before, .invite::after, .invite-card{ transition-duration:0.01ms !important; transition-delay:0s !important; animation:none !important; }
+    .seal{ animation:none !important; }
+    .invite, .invite::before, .invite::after, .invite-card, .seal-half{ transition-duration:0.01ms !important; transition-delay:0s !important; animation:none !important; }
   }
   
 </style>
 </head>
 <body>
 
-  <div class="invite" id="invite" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+ <div class="invite" id="invite" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
   <div class="invite-card">
     <div class="invite-logos">
       <img src="logo.png" alt="Shakes Peers logo">
@@ -925,7 +965,11 @@
       Five years of friendship, one night of mystery. Put on your finest and your mask, and join us.
     </p>
  
-    <button type="button" class="invite-btn" id="inviteBtn">Open Invitation</button>
+    <button type="button" class="seal" id="inviteBtn" aria-label="Open invitation">
+      <span class="seal-half l"><span class="seal-face">SP</span></span>
+      <span class="seal-half r"><span class="seal-face">SP</span></span>
+    </button>
+    <span class="seal-hint">Tap the seal to open</span>
   </div>
 </div>
   
@@ -1627,7 +1671,10 @@
       window.scrollTo(0, 0);
       setTimeout(() => inv.classList.add('gone'), 1600);
     }
-    btn.addEventListener('click', openInvite);
+    btn.addEventListener('click', () => {
+      btn.classList.add('broken');          // seal cracks in two
+      setTimeout(openInvite, 450);          // then the curtains open
+    });
   })();
   
 </script>
