@@ -974,6 +974,21 @@
 </head>
 <body>
 
+<audio id="bgMusic" src="OST of Shakes Peeers.mp3" loop preload="metadata"></audio>
+ 
+<button type="button" class="music-btn off" id="musicBtn" aria-label="Play music" title="Music">
+  <!-- sound on -->
+  <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>
+  </svg>
+  <!-- sound off -->
+  <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6"/><path d="M22 9l-5 6"/>
+  </svg>
+</button>
+  
+<section class="hero">
+  <div class="glow" aria-hidden="true"></div>
  <div class="invite" id="invite" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
   <div class="invite-card">
     <div class="invite-logos">
@@ -988,8 +1003,6 @@
  
     <div class="invite-rule" aria-hidden="true"></div>
  
-
- 
     <p class="invite-note">
       Five years of friendship, one night of mystery. Put on your finest and your mask, and join us.
     </p>
@@ -1001,20 +1014,6 @@
     <span class="seal-hint">Tap the seal to open</span>
   </div>
 </div>
-
-<audio id="bgMusic" src="OST of Shakes Peeers.mp3" loop preload="metadata"></audio>
- 
-<button type="button" class="music-btn off" id="musicBtn" aria-label="Play music" title="Music">
-  <!-- sound on -->
-  <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>
-  </svg>
-  <!-- sound off -->
-  <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M4 9v6h4l5 4V5L8 9H4z"/><p
-  
-<section class="hero">
-  <div class="glow" aria-hidden="true"></div>
 
   <div class="mask-wrap" style="display:flex; gap:1.5rem; justify-content:center; align-items:center;">
     <img src="logo.png" alt="Shakes Peers Logo" style="width:150px; height:150px; object-fit:contain; filter:drop-shadow(0 0 26px rgba(201,162,77,0.28));">
@@ -1771,5 +1770,5 @@
   })();
   
 </script>
-</body>
+<body>
 </html>
