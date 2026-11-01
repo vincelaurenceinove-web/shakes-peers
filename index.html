@@ -1716,6 +1716,59 @@
       setTimeout(openInvite, 450);          // then the curtains open
     });
   })();
+
+  (function(){
+    const audio = document.getElementById('bgMusic');
+    const btn   = document.getElementById('musicBtn');
+    if (!audio || !btn) return;
+ 
+    const VOLUME = 0.5;            // 0 (silent) to 1 (full)
+    audio.volume = VOLUME;
+ 
+    let started = false;           // has music ever been started?
+    let userMuted = false;         // did the guest turn it off on purpose?
+ 
+    function setUI(on){
+      btn.classList.toggle('off', !on);
+      btn.classList.toggle('playing', on);
+      btn.setAttribute('aria-label', on ? 'Mute music' : 'Play music');
+    }
+ 
+    function play(){
+      const p = audio.play();
+      if (p && p.then){
+        p.then(() => { started = true; setUI(true); })
+         .catch(() => setUI(false));      // blocked or file missing: stay silent
+      }
+    }
+    function pause(){ audio.pause(); setUI(false); }
+ 
+    /* Button: mute / unmute */
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (audio.paused){ userMuted = false; play(); }
+      else             { userMuted = true;  pause(); }
+    });
+ 
+    /* Start on the first tap of the invitation seal... */
+    const seal = document.getElementById('inviteBtn');
+    if (seal){
+      seal.addEventListener('click', () => { if (!userMuted) play(); }, { once:true });
+    } else {
+      /* ...or, with no invitation, on the guest's first tap anywhere */
+      const first = () => { if (!started && !userMuted) play(); };
+      document.addEventListener('pointerdown', first, { once:true });
+      document.addEventListener('keydown',     first, { once:true });
+    }
+ 
+    /* Pause when the guest leaves the tab, resume when they return */
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden){ if (!audio.paused) audio.pause(); }
+      else if (started && !userMuted){ play(); }
+    });
+ 
+    audio.addEventListener('error', () => setUI(false));
+  })();
   
 </script>
 </body>
