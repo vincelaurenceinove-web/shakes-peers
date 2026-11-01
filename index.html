@@ -937,6 +937,38 @@
     .seal{ animation:none !important; }
     .invite, .invite::before, .invite::after, .invite-card, .seal-half{ transition-duration:0.01ms !important; transition-delay:0s !important; animation:none !important; }
   }
+
+ /* ---- Music ---- */
+
+.music-btn{
+    position:fixed;
+    right:1rem; bottom:1rem;
+    z-index:900;
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1px solid rgba(201,162,77,0.55);
+    background:rgba(10,9,8,0.7);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    color:var(--gold-bright);
+    display:grid; place-items:center;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,0.55);
+    transition:background .3s ease, color .3s ease, transform .3s ease;
+  }
+  .music-btn:hover{ background:var(--gold); color:var(--black); transform:scale(1.06); }
+  .music-btn:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; }
+  .music-btn svg{ width:20px; height:20px; display:block; }
+  .music-btn .ico-off{ display:none; }
+  .music-btn.off .ico-on{ display:none; }
+  .music-btn.off .ico-off{ display:block; }
+  /* gentle pulse while music is playing */
+  .music-btn.playing{ animation:musicGlow 2.6s ease-in-out infinite; }
+  @keyframes musicGlow{
+    0%,100%{ box-shadow:0 6px 18px rgba(0,0,0,0.55), 0 0 0 rgba(232,200,116,0); }
+    50%    { box-shadow:0 6px 18px rgba(0,0,0,0.55), 0 0 16px rgba(232,200,116,0.45); }
+  }
+  @media (prefers-reduced-motion: reduce){ .music-btn.playing{ animation:none; } }
   
 </style>
 </head>
@@ -969,6 +1001,17 @@
     <span class="seal-hint">Tap the seal to open</span>
   </div>
 </div>
+
+<audio id="bgMusic" src="OST of Shakes Peeers.mp3" loop preload="metadata"></audio>
+ 
+<button type="button" class="music-btn off" id="musicBtn" aria-label="Play music" title="Music">
+  <!-- sound on -->
+  <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>
+  </svg>
+  <!-- sound off -->
+  <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9v6h4l5 4V5L8 9H4z"/><p
   
 <section class="hero">
   <div class="glow" aria-hidden="true"></div>
